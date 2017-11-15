@@ -1,12 +1,12 @@
 import java.util.Iterator;
 
 public class Dictionary<K, V> implements DictionaryInterface<K, V> {
-	
+
 	DictionaryNode[] table;
 	private final static int TABLE_SIZE = 5;
 
 	public Dictionary() {
-		// table = new DictionaryNode<K,V>[TABLE_SIZE];
+		table = (DictionaryNode<K, V>[]) new Object[TABLE_SIZE];
 	}
 
 	public V add(K key, V value) {
@@ -14,7 +14,7 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 		while (table[hash] != null && table[hash].getKey() != key)
 			hash = (hash + 1) % TABLE_SIZE;
 		table[hash] = new DictionaryNode(key, value);
-		return table[hash].getValue();
+		return (V)table[hash].getValue();
 	}
 
 	public V remove(K key) {
@@ -57,7 +57,7 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 
 	}
 
-	public class DictionaryNode {
+	public class DictionaryNode<K, V> {
 		private K key;
 		private V value;
 		private boolean valid;
@@ -83,7 +83,7 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 		public void remove() {
 			this.value = null;
 			this.key = null;
-			this.exists = false;
+			this.valid = false;
 		}
 
 		public void setValue(V value) {
