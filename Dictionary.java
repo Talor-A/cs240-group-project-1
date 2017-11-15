@@ -13,10 +13,8 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 		int hash = (key.hashCode() % table.length);
 		while (table[hash] != null && table[hash].getKey() != key)
 			hash = (hash + 1) % TABLE_SIZE;
-		if (table[hash] == null)
-			return null;
-		else
-			return table[hash].getValue();
+		table[hash] = new DictionaryNode(key, value);
+		return table[hash].getValue();
 	}
 
 	public V remove(K key) {
