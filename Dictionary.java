@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 
@@ -42,13 +44,19 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 	}
 
 	public Iterator<K> getKeyIterator() {
-		// TODO Auto-generated method stub
-		return null;
+		List<K> iter = new ArrayList<K>();
+		for(DictionaryNode d : table) {
+			iter.add((K) d.getKey());
+		}
+		return iter.iterator();
 	}
 
 	public Iterator<V> getValueIterator() {
-		// TODO Auto-generated method stub
-		return null;
+		List<V> iter = new ArrayList<V>();
+		for(DictionaryNode d : table) {
+			iter.add((V) d.getValue());
+		}
+		return iter.iterator();
 	}
 
 	public boolean isEmpty() {
