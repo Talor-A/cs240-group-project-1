@@ -56,8 +56,9 @@ public class Dictionary<K,V> implements DictionaryInterface<K,V> {
 		
 	}
 	public class DictionaryNode {
-		public K key;
-		public V value;
+		private K key;
+		private V value;
+		private boolean flag = false;
 
 		public DictionaryNode(K key, V value) {
 			this.key = key;
@@ -70,6 +71,10 @@ public class Dictionary<K,V> implements DictionaryInterface<K,V> {
 
 		public V getValue() {
 			return value;
+		}
+
+		public boolean getFlag() {
+			return flag;
 		}
 
 		public void setValue(V value) {
