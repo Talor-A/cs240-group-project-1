@@ -32,8 +32,10 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 	}
 
 	public V remove(K key) {
-		// TODO Auto-generated method stub
-		return null;
+		DictionaryNode n = table[getHash(key)];
+		V value = (V)n.getValue();
+		n.remove();
+		return value;
 	}
 
 	public V getValue(K key) {
