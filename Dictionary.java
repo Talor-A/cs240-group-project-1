@@ -15,6 +15,10 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 		int hash = (key.hashCode() % table.length);
 		while (table[hash] != null && table[hash].getKey() != key)
 			hash = (hash + 1) % TABLE_SIZE;
+		if(table[hash] != null)
+		{
+			//linear probe
+		}
 		table[hash] = new DictionaryNode(key, value);
 		return (V) table[hash].getValue();
 	}
@@ -60,7 +64,6 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 	}
 
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
 		for (DictionaryNode i : table) {
 			if (i != null && !i.valid())
 				return false;
@@ -69,12 +72,11 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 	}
 
 	public int getSize() {
-		// TODO Auto-generated method stub
 		return table.length;
 	}
 
 	public void clear() {
-		// TODO Auto-generated method stub
+		
 		for (DictionaryNode i : table) {
 			if (i != null)
 				i.remove();
