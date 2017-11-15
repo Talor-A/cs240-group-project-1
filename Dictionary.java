@@ -23,8 +23,13 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 	}
 
 	public V getValue(K key) {
-		// TODO Auto-generated method stub
-		return null;
+		int hash = (key.hashCode() % TABLE_SIZE);
+        while (table[hash] != null && table[hash].getKey() != key)
+              hash = (hash + 1) % TABLE_SIZE;
+        if (table[hash] == null)
+              return null;
+        else
+              return (V)table[hash].getValue();
 	}
 
 	public boolean contains(K key) {
