@@ -17,19 +17,25 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 		return (V) table[hash].getValue();
 	}
 
+	public int getHash(K key) {
+		int hash = key.getHashCode();
+		while (table[hash].getKey() != key) {
+			hash = (hash + 1) % TABLE_SIZE;
+		}
+		return hash;
+	}
+
 	public V remove(K key) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public V getValue(K key) {
-		int hash = (key.hashCode() % TABLE_SIZE);
-        while (table[hash] != null && table[hash].getKey() != key)
-              hash = (hash + 1) % TABLE_SIZE;
-        if (table[hash] == null)
-              return null;
-        else
-              return (V)table[hash].getValue();
+		int hash = getHash(key);
+		if (table[hash] == null)
+			return null;
+		else
+			return (V) table[hash].getValue();
 	}
 
 	public boolean contains(K key) {
