@@ -1,10 +1,22 @@
 import java.util.Iterator;
 
 public class Dictionary<K, V> implements DictionaryInterface<K, V> {
+	
+	DictionaryNode[] table;
+	private final static int TABLE_SIZE = 5;
+
+	public Dictionary() {
+		// table = new DictionaryNode<K,V>[TABLE_SIZE];
+	}
 
 	public V add(K key, V value) {
-		// TODO Auto-generated method stub
-		return null;
+		int hash = (key.hashCode() % table.length);
+		while (table[hash] != null && table[hash].getKey() != key)
+			hash = (hash + 1) % TABLE_SIZE;
+		if (table[hash] == null)
+			return null;
+		else
+			return table[hash].getValue();
 	}
 
 	public V remove(K key) {
