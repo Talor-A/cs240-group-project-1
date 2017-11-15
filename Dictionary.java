@@ -24,7 +24,7 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 	}
 
 	public int getHash(K key) {
-		int hash = key.getHashCode();
+		int hash = key.hashCode();
 		while (table[hash].getKey() != key) {
 			hash = (hash + 1) % TABLE_SIZE;
 		}
