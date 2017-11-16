@@ -18,6 +18,10 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 		if(table[hash] != null)
 		{
 			//linear probe
+			for(int i = 0;i<table.length; i++)
+			{
+				
+			}
 		}
 		table[hash] = new DictionaryNode(key, value);
 		return (V) table[hash].getValue();
