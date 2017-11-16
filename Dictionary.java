@@ -5,18 +5,34 @@ import java.util.List;
 public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 
 	DictionaryNode[] table;
-	private final static int TABLE_SIZE = 5;
+	private final static int INITIAL_TABLE_SIZE = 5;
+	private int tableSize;
 
 	public Dictionary() {
-		table = (DictionaryNode<K, V>[]) new Object[TABLE_SIZE];
+		table = new DictionaryNode<K, V>[INITIAL_TABLE_SIZE];
+		tableSize = INITIAL_TABLE_SIZE;
+	}
+
+	public void rehash() {
+		int newTableSize = (tableSize * 2) + 1;
+		DictionaryNode[] oldTable = table;
+		table = new DictionaryNode<K, V>[newTableSize];
+
+		for (DictionaryNode entry : oldTable) {
+			if (entry != null && entry.valid()) {
+				add((K) entry.getKey(), (V) entry.getValue());
+			}
+		}
 	}
 
 	public V add(K key, V value) {
+		if(isFull()){
+			rehash();
+		}
 		int hash = (key.hashCode() % table.length);
 		while (table[hash] != null && table[hash].getKey() != key)
-			hash = (hash + 1) % TABLE_SIZE;
-		if(table[hash] != null)
-		{
+			hash = (hash + 1) % tableSize;
+		if (table[hash] != null) {
 			//linear probe
 		}
 		table[hash] = new DictionaryNode(key, value);
@@ -26,14 +42,14 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 	public int getHash(K key) {
 		int hash = key.hashCode();
 		while (table[hash].getKey() != key) {
-			hash = (hash + 1) % TABLE_SIZE;
+			hash = (hash + 1) % tableSize;
 		}
 		return hash;
 	}
 
 	public V remove(K key) {
 		DictionaryNode n = table[getHash(key)];
-		V value = (V)n.getValue();
+		V value = (V) n.getValue();
 		n.remove();
 		return value;
 	}
@@ -57,7 +73,7 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 
 	public Iterator<K> getKeyIterator() {
 		List<K> iter = new ArrayList<K>();
-		for(DictionaryNode d : table) {
+		for (DictionaryNode d : table) {
 			iter.add((K) d.getKey());
 		}
 		return iter.iterator();
@@ -65,7 +81,7 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 
 	public Iterator<V> getValueIterator() {
 		List<V> iter = new ArrayList<V>();
-		for(DictionaryNode d : table) {
+		for (DictionaryNode d : table) {
 			iter.add((V) d.getValue());
 		}
 		return iter.iterator();
@@ -79,12 +95,22 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 		return true;
 	}
 
+	public boolean isFull() {
+		for (DictionaryNode entry : table) {
+			if (entry == null)
+				return false;
+			if (!entry.valid())
+				return false;
+		}
+		return true;
+	}
+
 	public int getSize() {
 		return table.length;
 	}
 
 	public void clear() {
-		
+
 		for (DictionaryNode i : table) {
 			if (i != null)
 				i.remove();
