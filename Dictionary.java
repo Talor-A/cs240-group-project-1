@@ -15,34 +15,43 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 
 	public void rehash() {
 		System.out.println("rehashing...");
-		int newTableSize = (tableSize * 2) + 1;
+		tableSize = (tableSize * 2) + 1;
 		DictionaryNode<K, V>[] oldTable = table;
-		table = (DictionaryNode<K, V>[]) new DictionaryNode[newTableSize];
+		table = (DictionaryNode<K, V>[]) new DictionaryNode[tableSize];
 
 		for (DictionaryNode<K, V> entry : oldTable) {
-			if (entry != null && entry.valid()) {
+			if (entry != null) {
 				System.out.println("rehashing key " + (K) entry.getKey());
 				add((K) entry.getKey(), (V) entry.getValue());
 			}
 		}
+		System.out.println("new size: " + table.length);
 	}
 
 	public V add(K key, V value) {
 		if (isFull()) {
+			System.out.println("full!");
 			rehash();
 		}
 		int hash = (key.hashCode() % table.length);
 		if (table[hash] != null) {
 			//linear probe
-			for(int i = 0;i<table.length; i++)
-			{
-				if(table[hash] == null)
-				{
-					hash = i;
+			// for(int i = 0;i<table.length; i++)
+			// {
+			// 	if(table[hash] == null)
+			// 	{
+			// 		hash = i;
+			// 	}
+			// }
+			int count = 0;
+			while (table[hash] != null && table[hash].getKey() != key) {
+				hash = (hash + 1) % table.length;
+				count++;
+				if (count > table.length) {
+					System.out.println("failed to add!!");
+					return null;
 				}
 			}
-			// while (table[hash] != null && table[hash].getKey() != key)
-			// hash = (hash + 1) % tableSize;
 		}
 		table[hash] = new DictionaryNode<K, V>(key, value);
 		return (V) table[hash].getValue();
@@ -59,7 +68,7 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 	public V remove(K key) {
 		DictionaryNode<K, V> n = table[getHash(key)];
 		V value = (V) n.getValue();
-		n.remove();
+		table[getHash(key)] = null;
 		return value;
 	}
 
@@ -98,7 +107,7 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 
 	public boolean isEmpty() {
 		for (DictionaryNode<K, V> i : table) {
-			if (i != null && !i.valid())
+			if (i != null)
 				return false;
 		}
 		return true;
@@ -106,13 +115,11 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 
 	public boolean isFull() {
 		for (DictionaryNode<K, V> entry : table) {
-			if (entry == null){
-				System.out.println("not full!!");
+			if (entry == null) {
 				return false;
 			}
 		}
-		System.out.println("full!");
-		
+
 		return true;
 	}
 
@@ -122,9 +129,8 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 
 	public void clear() {
 
-		for (DictionaryNode<K, V> i : table) {
-			if (i != null)
-				i.remove();
+		for (int i = 0; i < tableSize; i++) {//DictionaryNode<K, V> i : table) {
+			table[i] = null;
 		}
 	}
 

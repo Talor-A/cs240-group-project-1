@@ -10,14 +10,14 @@ public class DictionaryTest {
     myDictionary.add(key1, "value1");
     myDictionary.add("key2", "value2");
     myDictionary.add(key3, "value3");
-    System.out.println("removing key2");
-    myDictionary.remove("key2");
-    System.out.print("key2 removed successfully: ");
+    // System.out.println("removing key2");
+    // myDictionary.remove("key2");
+    // System.out.print("key2 removed successfully: ");
     System.out.println(!myDictionary.contains("key2"));
     System.out.print("key1 value: ");
     System.out.println(myDictionary.getValue(key1));
     System.out.println("Adding a bunch of keys...");
-    for (int i = 5; i < 30; i++) {
+    for (int i = 4; i < 15; i++) {
       System.out.println("adding " + i);
       myDictionary.add("key" + i, "value" + i);
     }
