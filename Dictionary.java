@@ -30,14 +30,17 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 			rehash();
 		}
 		int hash = (key.hashCode() % table.length);
-		while (table[hash] != null && table[hash].getKey() != key)
-			hash = (hash + 1) % tableSize;
 		if (table[hash] != null) {
 			//linear probe
 			for(int i = 0;i<table.length; i++)
 			{
-				
+				if(table[hash] == null)
+				{
+					hash = i;
+				}
 			}
+			while (table[hash] != null && table[hash].getKey() != key)
+			hash = (hash + 1) % tableSize;
 		}
 		table[hash] = new DictionaryNode(key, value);
 		return (V) table[hash].getValue();
