@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 
-	DictionaryNode[] table;
+	DictionaryNode<K, V>[] table;
 	private final static int INITIAL_TABLE_SIZE = 5;
 	private int tableSize;
 
@@ -14,12 +14,14 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 	}
 
 	public void rehash() {
+		System.out.println("rehashing...");
 		int newTableSize = (tableSize * 2) + 1;
-		DictionaryNode[] oldTable = table;
+		DictionaryNode<K, V>[] oldTable = table;
 		table = (DictionaryNode<K, V>[]) new DictionaryNode[newTableSize];
 
-		for (DictionaryNode entry : oldTable) {
+		for (DictionaryNode<K, V> entry : oldTable) {
 			if (entry != null && entry.valid()) {
+				System.out.println("rehashing key " + (K) entry.getKey());
 				add((K) entry.getKey(), (V) entry.getValue());
 			}
 		}
@@ -35,7 +37,7 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 		if (table[hash] != null) {
 			//linear probe
 		}
-		table[hash] = new DictionaryNode(key, value);
+		table[hash] = new DictionaryNode<K, V>(key, value);
 		return (V) table[hash].getValue();
 	}
 
@@ -48,7 +50,7 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 	}
 
 	public V remove(K key) {
-		DictionaryNode n = table[getHash(key)];
+		DictionaryNode<K, V> n = table[getHash(key)];
 		V value = (V) n.getValue();
 		n.remove();
 		return value;
@@ -64,7 +66,7 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 
 	public boolean contains(K key) {
 		// TODO Auto-generated method stub
-		for (DictionaryNode i : table) {
+		for (DictionaryNode<K, V> i : table) {
 			if (i != null && i.getKey() == key)
 				return true;
 		}
@@ -73,7 +75,7 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 
 	public Iterator<K> getKeyIterator() {
 		List<K> iter = new ArrayList<K>();
-		for (DictionaryNode d : table) {
+		for (DictionaryNode<K, V> d : table) {
 			iter.add((K) d.getKey());
 		}
 		return iter.iterator();
@@ -81,14 +83,14 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 
 	public Iterator<V> getValueIterator() {
 		List<V> iter = new ArrayList<V>();
-		for (DictionaryNode d : table) {
+		for (DictionaryNode<K, V> d : table) {
 			iter.add((V) d.getValue());
 		}
 		return iter.iterator();
 	}
 
 	public boolean isEmpty() {
-		for (DictionaryNode i : table) {
+		for (DictionaryNode<K, V> i : table) {
 			if (i != null && !i.valid())
 				return false;
 		}
@@ -96,12 +98,14 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 	}
 
 	public boolean isFull() {
-		for (DictionaryNode entry : table) {
-			if (entry == null)
+		for (DictionaryNode<K, V> entry : table) {
+			if (entry == null){
+				System.out.println("not full!!");
 				return false;
-			if (!entry.valid())
-				return false;
+			}
 		}
+		System.out.println("full!");
+		
 		return true;
 	}
 
@@ -111,7 +115,7 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 
 	public void clear() {
 
-		for (DictionaryNode i : table) {
+		for (DictionaryNode<K, V> i : table) {
 			if (i != null)
 				i.remove();
 		}
