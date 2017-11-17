@@ -18,7 +18,7 @@ public class DictionaryTest {
     System.out.println(myDictionary.getValue(key1));
     System.out.println("Adding a bunch of keys...");
     for (int i = 5; i < 30; i++) {
-      System.out.println("adding "+i);
+      System.out.println("adding " + i);
       myDictionary.add("key" + i, "value" + i);
     }
     System.out.println("Testing Rehashing...");

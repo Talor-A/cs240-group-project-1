@@ -41,8 +41,8 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 					hash = i;
 				}
 			}
-			while (table[hash] != null && table[hash].getKey() != key)
-			hash = (hash + 1) % tableSize;
+			// while (table[hash] != null && table[hash].getKey() != key)
+			// hash = (hash + 1) % tableSize;
 		}
 		table[hash] = new DictionaryNode<K, V>(key, value);
 		return (V) table[hash].getValue();
