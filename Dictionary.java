@@ -9,14 +9,14 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 	private int tableSize;
 
 	public Dictionary() {
-		table = new DictionaryNode<K, V>[INITIAL_TABLE_SIZE];
 		tableSize = INITIAL_TABLE_SIZE;
+		table = (DictionaryNode<K, V>[]) new DictionaryNode[tableSize];
 	}
 
 	public void rehash() {
 		int newTableSize = (tableSize * 2) + 1;
 		DictionaryNode[] oldTable = table;
-		table = new DictionaryNode<K, V>[newTableSize];
+		table = (DictionaryNode<K, V>[]) new DictionaryNode[newTableSize];
 
 		for (DictionaryNode entry : oldTable) {
 			if (entry != null && entry.valid()) {
@@ -26,7 +26,7 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 	}
 
 	public V add(K key, V value) {
-		if(isFull()){
+		if (isFull()) {
 			rehash();
 		}
 		int hash = (key.hashCode() % table.length);
@@ -44,7 +44,7 @@ public class Dictionary<K, V> implements DictionaryInterface<K, V> {
 	}
 
 	public int getHash(K key) {
-		int hash = key.hashCode();
+		int hash = key.hashCode() % tableSize;
 		while (table[hash].getKey() != key) {
 			hash = (hash + 1) % tableSize;
 		}
